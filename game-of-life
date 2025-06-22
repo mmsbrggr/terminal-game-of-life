@@ -1,0 +1,6 @@
+#!/bin/bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+PYTHON_SCRIPT_PATH="${SCRIPT_DIR}/scripts/run_game.py"
+MODULES_PATH="${SCRIPT_DIR}/src"
+export PYTHONPATH="${MODULES_PATH}:${PYTHONPATH}"
+python "${PYTHON_SCRIPT_PATH}" "$@"
