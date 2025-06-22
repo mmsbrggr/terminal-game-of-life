@@ -28,6 +28,19 @@ class InfiniteGrid:
         self._grid[origin - y, origin + x] = value
         self._ensure_padding()
 
+    def set_array(self, array : np.ndarray[Any, np.dtype[np.bool]]):
+        if len(array.shape) != 2:
+            raise ValueError("Array must be 2D")
+        required_size = max(array.shape[0], array.shape[1], self._min_size)
+        if required_size % 2 == 0:
+            required_size += 1
+        self._grid = np.zeros((required_size, required_size), dtype=np.bool)
+        origin = int(required_size / 2)
+        insert_from_y = origin - int(array.shape[0]  / 2)
+        insert_from_x = origin - int(array.shape[1]  / 2)
+        self._grid[insert_from_y : insert_from_y + array.shape[0], insert_from_x : insert_from_x + array.shape[1]] = array
+        self._ensure_padding()
+
     def _ensure_coordinate_exists(self, coordinate : int):
         required_size = 2 * abs(coordinate) + 1
         grid_size, _ = self._grid.shape
@@ -52,7 +65,7 @@ class InfiniteGrid:
     def _ensure_padding(self):
         if not self._border_has_elements():
             return
-        self._grid = np.pad(self._grid, 1, mode="constant", constant_values=False)
+        self._grid = np.pad(self._grid, 2, mode="constant", constant_values=False)
 
     def _border_has_elements(self) -> np.bool:
         size, _ = self._grid.shape

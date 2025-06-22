@@ -1,3 +1,4 @@
+from typing import Any
 import numpy as np
 import random
 from .infinite_grid import InfiniteGrid
@@ -17,19 +18,8 @@ class GameOfLife:
     def __init__(self):
         self._grid = InfiniteGrid()
 
-    def set_glider(self) -> None:
-        self._grid.set(-1, 0)
-        self._grid.set(0, 0)
-        self._grid.set(1, 0)
-        self._grid.set(1, 1)
-        self._grid.set(0, 2)
-
-    def set_random(self, size: int) -> None:
-        min_coordinate = -int(size/2)
-        for x in range(min_coordinate, min_coordinate + size):
-            for y in range(min_coordinate, min_coordinate + size):
-                if random.choice([True, False]):
-                    self._grid.set(x, y)
+    def set_pattern(self, pattern: np.ndarray[Any, np.dtype[np.bool]]) -> None:
+        self._grid.set_array(pattern)    
 
     def step(self) -> None:
         self._grid.apply_window_function(_cell_lives)
